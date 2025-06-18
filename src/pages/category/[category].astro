@@ -3,7 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import VideoCard from '../../components/VideoCard.astro';
 import videosData from '../../data/videos.json';
-
+export const prerender = true;
 const VIDEOS_PER_PAGE = 20; // Atur jumlah video per halaman
 
 export async function getStaticPaths() {

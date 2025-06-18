@@ -2,7 +2,7 @@
 // src/pages/video/[id].astro
 import Layout from '../../layouts/Layout.astro';
 import videosData from '../../data/videos.json';
-
+export const prerender = true;
 export async function getStaticPaths() {
   return videosData.map(video => ({
     params: { id: video.id }

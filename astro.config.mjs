@@ -19,5 +19,6 @@ export default defineConfig({
     mode: 'standalone'
   }),
 
-  integrations: [sitemap()]
+  integrations: [sitemap()];
+  site: 'https://bokepjilbabsmp.pages.dev'
 });

@@ -3,7 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import VideoCard from '../components/VideoCard.astro';
 import videosData from '../data/videos.json'; // Impor data JSON
-
+export const prerender = true;
 // Ambil 10 video terbaru (misalnya, berdasarkan ID atau index, asumsikan yang terakhir ditambahkan adalah yang terbaru)
 const latestVideos = videosData.slice(0, 10);
 
