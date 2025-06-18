@@ -18,7 +18,7 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone'
   }),
-
+  site: 'https://bokepjilbabsmp.pages.dev',
   integrations: [sitemap()];
-  site: 'https://bokepjilbabsmp.pages.dev'
+  
 });
