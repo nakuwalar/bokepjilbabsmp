@@ -1,25 +1,51 @@
 ---
 // src/components/VideoCard.astro
+import { slugify } from '../utils/slugify'; // Import slugify jika Anda tidak menyimpan slug di JSON
+
 interface Props {
-  id: string;
+  id: string; // Tetap pertahankan ID jika masih digunakan di tempat lain
   title: string;
   description: string;
   category: string;
-  thumbnail: string; // Ini akan menjadi path lokal
+  thumbnail: string;
+  slug?: string; // Tambahkan slug ke interface, jadikan opsional jika tidak selalu ada di JSON
 }
 
-const { id, title, description, category, thumbnail } = Astro.props;
+const { id, title, description, category, thumbnail, slug } = Astro.props;
 
-const videoUrl = `/video/${id}/`;
+// Prioritaskan slug dari props, jika tidak ada, buat dari judul
+const videoSlug = slug || slugify(title);
+
+// Gunakan slug di URL
+const videoUrl = `/video/${videoSlug}/`;
 ---
 
-<a href={videoUrl} class="block bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-  <img src={thumbnail} alt={title} class="w-full h-48 object-cover" loading="lazy" width="640" height="360">
+<a
+  href={videoUrl}
+  class="block bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group"
+>
+  <img
+    src={thumbnail}
+    alt={title}
+    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+    loading="lazy"
+    width="640"
+    height="360"
+  />
   <div class="p-4">
-    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">{title}</h3>
-    <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-2">{description}</p>
-    <div class="text-xs text-blue-600 dark:text-blue-400 font-medium">
-      {category}
+    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+      {title}
+    </h3>
+    <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-2">
+      {description}
+    </p>
+    <div class="text-xs font-medium">
+      <a
+        href={`/category/${encodeURIComponent(category.toLowerCase().replace(/\s+/g, '-'))}/`}
+        class="text-blue-600 dark:text-blue-400 hover:underline"
+      >
+        {category}
+      </a>
     </div>
   </div>
 </a>
