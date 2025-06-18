@@ -1,22 +1,25 @@
 ---
 // src/components/VideoCard.astro
-import { slugify } from '../utils/slugify'; // Import slugify jika Anda tidak menyimpan slug di JSON
+import { slugify } from '../utils/slugify';
 
 interface Props {
-  id: string; // Tetap pertahankan ID jika masih digunakan di tempat lain
+  id: string;
   title: string;
   description: string;
   category: string;
   thumbnail: string;
-  slug?: string; // Tambahkan slug ke interface, jadikan opsional jika tidak selalu ada di JSON
+  tags: string;
+  slug?: string; // Slug might be pre-defined
 }
 
 const { id, title, description, category, thumbnail, slug } = Astro.props;
 
-// Prioritaskan slug dari props, jika tidak ada, buat dari judul
+// For VideoCard, we typically don't have access to ALL existing slugs in the build,
+// so if the 'slug' prop is provided (from getStaticPaths), use it.
+// If not, generate a basic slug from the title.
+// The uniqueness check is primarily done in getStaticPaths.
 const videoSlug = slug || slugify(title);
 
-// Gunakan slug di URL
 const videoUrl = `/video/${videoSlug}/`;
 ---
 

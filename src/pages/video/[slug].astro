@@ -1,9 +1,8 @@
 ---
-// src/pages/video/[slug].astro
 export const prerender = true;
 
 import Layout from '../../layouts/Layout.astro';
-import VideoCard from '../../components/VideoCard.astro'; // Perlu impor VideoCard
+import VideoCard from '../../components/VideoCard.astro';
 import videosData from '../../data/videos.json';
 import { slugify } from '../../utils/slugify';
 
@@ -14,14 +13,28 @@ interface Video {
   category: string;
   thumbnail: string;
   embedUrl: string;
+  tags: string;
   slug?: string;
 }
 
 export async function getStaticPaths() {
-  return videosData.map((video: Video) => ({
-    params: { slug: video.slug || slugify(video.title) },
-    props: { video }
-  }));
+  const generatedPaths: { params: { slug: string }, props: { video: Video } }[] = [];
+  const existingSlugs = new Set<string>();
+
+  for (const video of videosData) {
+    const videoSlug = video.slug
+      ? slugify(video.slug, Array.from(existingSlugs))
+      : slugify(video.title, Array.from(existingSlugs));
+
+    existingSlugs.add(videoSlug);
+
+    generatedPaths.push({
+      params: { slug: videoSlug },
+      props: { video }
+    });
+  }
+
+  return generatedPaths;
 }
 
 const { video } = Astro.props as { video: Video };
@@ -34,19 +47,13 @@ const siteBaseUrl = Astro.site;
 const videoUploadDate = new Date().toISOString().split('T')[0];
 const categorySlug = encodeURIComponent(video.category.toLowerCase().replace(/\s+/g, '-'));
 
-// --- Logika Video Terkait ---
-// Filter video yang memiliki kategori yang sama dengan video saat ini
 const relatedVideos = videosData.filter(
-  (v: Video) => v.category === video.category && v.id !== video.id // Pastikan bukan video yang sedang ditonton
+  (v: Video) => v.category === video.category && v.id !== video.id
 );
 
-// Acak dan ambil beberapa video terkait (misal, 4 video)
-// Ini agar setiap kali halaman dimuat, related videos bisa bervariasi sedikit
 const shuffledRelatedVideos = relatedVideos.sort(() => 0.5 - Math.random());
 const videosToShow = shuffledRelatedVideos.slice(0, 20);
 
-// Jika tidak ada video terkait dari kategori yang sama, mungkin tampilkan beberapa video terbaru atau populer
-// Untuk demo ini, kita hanya akan menampilkan jika ada kategori yang sama.
 ---
 
 <Layout
