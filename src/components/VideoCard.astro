@@ -1,0 +1,22 @@
+---
+// src/components/VideoCard.astro
+import { slugify } from '../utils/slugify';
+import type { VideoData } from '../utils/data'; // Import type untuk kejelasan
+
+export interface Props {
+  video: VideoData; // Gunakan interface VideoData yang diimpor
+}
+
+const { video } = Astro.props;
+const videoSlug = slugify(video.title);
+---
+
+<a href={`/${video.id}/${videoSlug}`} class="video-card">
+  <div class="thumbnail-container">
+    <img src={video.thumbnail} alt={video.title} loading="lazy" />
+    </div>
+  <div class="video-info">
+    <h3 class="video-title">{video.title}</h3>
+    <p class="video-category">{video.category}</p>
+    </div>
+</a>

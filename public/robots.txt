@@ -1,3 +1,4 @@
 User-agent: *
-Allow: /
-Sitemap: https://bokepjilbabsmp.pages.dev/sitemap-index.xml
+Disallow:
+
+Sitemap: https://bokepjilbabsmp.pages.dev/sitemap.xml
