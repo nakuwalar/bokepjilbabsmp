@@ -1,7 +1,7 @@
 ---
 // src/pages/video/[query]/[page].astro
-// Halaman Pencarian Utama dengan Paginasi Berbasis Path Parameter
-import { nama, url } from '../../../utils/site.ts';
+// Page Pencarian Utama dengan Paginasi Berbasis Path Parameter
+import { nama, url, desk } from '../../../utils/site.ts';
 import Layout from '../../../layouts/BaseLayout.astro';
 import VideoCard from '../../../components/VideoCard.astro';
 import { getAllVideos, type VideoData } from '../../../utils/data.ts';
@@ -25,7 +25,7 @@ const searchWords = searchInput
 
 console.log(`[VIDEO PAGE] Kueri asli dari URL: "${originalQuery}"`);
 console.log(`[VIDEO PAGE] Kata-kata pencarian terurai: ${JSON.stringify(searchWords)}`);
-console.log(`[VIDEO PAGE] Halaman saat ini: ${currentPage}`);
+console.log(`[VIDEO PAGE] Page saat ini: ${currentPage}`);
 
 let searchResults: VideoData[] = [];
 let preconnectDomains: string[] = [];
@@ -58,7 +58,7 @@ if (searchWords.length > 0) {
 
     console.log(`[VIDEO PAGE] Jumlah total hasil: ${searchResults.length}`);
     console.log(`[VIDEO PAGE] Total halaman: ${totalPages}`);
-    console.log(`[VIDEO PAGE] Hasil paginasi di halaman ${validCurrentPage}: ${paginatedResults.length} video`);
+    console.log(`[VIDEO PAGE] Hasil paginasi di Page ${validCurrentPage}: ${paginatedResults.length} video`);
 
     if (paginatedResults.length > 0) {
       const domainsSet = new Set<string>();
@@ -100,21 +100,19 @@ const displayQuery = capitalizeWords(originalQuery);
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
-  // *** PATH CHANGE: Updated Tags URL if it's meant to be relative to the new structure ***
-  { name: 'Tags', url: `${url}/tags` },
-  { name: `${displayQuery} di ${nama}`, url: null }, // Menggunakan displayQuery di breadcrumb
+  { name: `${displayQuery} di ${nama}`, url: null },
 ];
 ---
 
 <Layout
-  title={`${displayQuery} di ${nama} | Halaman ${currentPage}`} // Menggunakan displayQuery
-  description={`${displayQuery} Nonton Streaming Bokep Terbaru di ${nama}. Halaman ${currentPage}.`} // Menggunakan displayQuery
+  title={`${displayQuery} di ${nama} | Page ${currentPage}`}
+  description={`${displayQuery} ${desk} di ${nama}. Page ${currentPage}.`}
   preconnectDomains={preconnectDomains}
 >
   <main class="search-page" itemscope itemtype="http://schema.org/SearchResultsPage">
     <meta itemprop="url" content={Astro.url.href} />
-    <meta itemprop="name" content={`${displayQuery} di ${nama} | Halaman ${currentPage}`} /> {/* Menggunakan displayQuery */}
-    <meta itemprop="description" content={`${displayQuery} Nonton Streaming Bokep Terbaru di ${nama}. Halaman ${currentPage} dari total ${totalPages} halaman.`} /> {/* Menggunakan displayQuery */}
+    <meta itemprop="name" content={`${displayQuery} di ${nama} | Page ${currentPage}`} />
+    <meta itemprop="description" content={`${displayQuery} ${desk} di ${nama}. Page ${currentPage} dari total ${totalPages} halaman.`} />
     <meta itemprop="encodingFormat" content="text/html" />
     <meta itemprop="numberOfItems" content={searchResults.length.toString()} />
     <meta itemprop="about" content={originalQuery} />
@@ -157,9 +155,9 @@ const breadcrumbs = [
     )}
 
     {totalPages > 1 && (
-      <nav class="pagination" aria-label="Navigasi Halaman Pencarian">
+      <nav class="pagination" aria-label="Navigasi Page Pencarian">
         {currentPage > 1 && (
-          <a href={`${baseSearchUrl}/${currentPage - 1}`} class="pagination-link">&laquo; Sebelumnya</a>
+          <a href={`${baseSearchUrl}/${currentPage - 1}`} class="pagination-link">&laquo; {displayQuery}</a>
         )}
         {Array.from({ length: totalPages }, (_, i) => i + 1).filter(p =>
           p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)
@@ -173,7 +171,7 @@ const breadcrumbs = [
         ))}
         {(currentPage + 2 < totalPages && totalPages > 5) && (currentPage < totalPages - 2) && <span class="pagination-link ellipsis">...</span>}
         {currentPage < totalPages && (
-          <a href={`${baseSearchUrl}/${currentPage + 1}`} class="pagination-link">Berikutnya &raquo;</a>
+          <a href={`${baseSearchUrl}/${currentPage + 1}`} class="pagination-link">Next &raquo;</a>
         )}
       </nav>
     )}
