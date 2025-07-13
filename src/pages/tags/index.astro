@@ -151,7 +151,7 @@ const pageKeywords = `tags video, daftar tags, ${nama} tags, topik video, genre 
         ) : (
             <div class="tags-grid">
                 {paginatedTags.map(tag => (
-                    <a href={`${url}/video/${slugify(tag)}/1`} class="tag-card" rel="tag" title={`Lihat semua video dengan tag ${tag}`}>
+                    <a href={`${url}/video/${slugify(tag)}/`} class="tag-card" rel="tag" title={`Lihat semua video dengan tag ${tag}`}>
                         {tag}
                     </a>
                 ))}
