@@ -1,15 +1,8 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
-import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://bokepjilbabsmp.pages.dev',
-  output: 'server',
+  output: 'hybrid',
   adapter: cloudflare(),
-  integrations: 
-  
-  [sitemap({
-    changefreq: 'daily',
-    priority: 1,
-    })],
 });
